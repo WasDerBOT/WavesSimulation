@@ -1,5 +1,7 @@
 import sys
 
+from PyQt6.QtCore import QThread
+from PyQt6.QtCore import QTimer
 from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QWidget, QMainWindow
@@ -9,10 +11,20 @@ from Physic_classes import Plane
 
 
 class Main(QMainWindow):
-    def __init__(self):
+    def __init__(self, plane: Plane):
         super().__init__()
         loadUi("main.ui", self)
+        plane.painter = QPainter(self)
+        self.timer = QTimer()
+        self.timer.timeout.connect(plane.process)
+        self.timer.start(30)
         self.painter = QPainter(self)
+
+    def update_screen(self):
+        pass
+
+
+
 
 
 class Entry(QWidget):
@@ -31,8 +43,9 @@ FPS = 30
 Frequency = 1 / FPS
 
 app = QApplication(sys.argv)
-window = Main()
-Field = Plane(550, 650, window.painter)
+
+Field = Plane(550, 650)
+window = Main(Field)
 entry = Entry()
 create = Create()
 
