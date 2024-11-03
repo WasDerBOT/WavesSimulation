@@ -3,7 +3,6 @@ import sys
 from PyQt6.QtWidgets import QWidget, QApplication, QMainWindow
 from PyQt6.uic import loadUi
 
-
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()

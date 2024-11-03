@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Greeting</class>
- <widget class="QWidget" name="Greeting">
+ <class>Create</class>
+ <widget class="QWidget" name="Create">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -16,61 +16,71 @@
   <widget class="QLabel" name="tittle">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>10</y>
-     <width>761</width>
-     <height>241</height>
+     <width>781</width>
+     <height>111</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>55</pointsize>
+     <pointsize>28</pointsize>
     </font>
    </property>
    <property name="text">
-    <string>Waves simulation</string>
+    <string>Field creation</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignmentFlag::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="subtittle">
+  <widget class="QSlider" name="horizontalSlider">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>180</y>
-     <width>761</width>
-     <height>101</height>
+     <x>50</x>
+     <y>440</y>
+     <width>711</width>
+     <height>61</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <pointsize>20</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Developed by </string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
+   <property name="orientation">
+    <enum>Qt::Orientation::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QPushButton" name="enterBtn">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>240</x>
-     <y>400</y>
-     <width>301</width>
-     <height>101</height>
+     <x>60</x>
+     <y>160</y>
+     <width>701</width>
+     <height>91</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>36</pointsize>
+     <pointsize>24</pointsize>
     </font>
    </property>
    <property name="text">
-    <string>Enter</string>
+    <string>Resolution: {height} x {width}</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>300</y>
+     <width>701</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>24</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Total points: {height * width}</string>
    </property>
   </widget>
  </widget>
