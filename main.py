@@ -14,17 +14,14 @@ class Main(QMainWindow):
     def __init__(self, plane: Plane):
         super().__init__()
         loadUi("main.ui", self)
-        plane.painter = QPainter(self)
+        self.painter = QPainter(self)
+        plane.painter = self.painter
         self.timer = QTimer()
         self.timer.timeout.connect(plane.process)
         self.timer.start(30)
-        self.painter = QPainter(self)
 
     def update_screen(self):
         pass
-
-
-
 
 
 class Entry(QWidget):
