@@ -16,6 +16,7 @@ class Point:
         painter.setPen(QPen(QColor(126 + 126 * self.height, 126 + 126 * self.height, 126 + 126 * self.height)))
         painter.drawPoint(self.x, self.y)
 
+
     def process(self, painter, point_up, point_down, point_left, point_right):
         force = point_up.height + point_down.height + point_left.height + point_right.height
         self.velocity += force / (Frequency * self.mass * 10)

@@ -20,20 +20,47 @@ class Main(QMainWindow, Ui_MainWindow):
         plane.painter = QPainter(self)
         self.timer = QTimer()
         self.timer.timeout.connect(plane.process)
-        # self.timer.start(30)
         self.painter = QPainter(self)
+        self.SaveBtn.clicked.connect(self.to_save)
+
+    def pause(self):
+        self.timer.stop()
+
+    def resume(self):
+        self.timer.start(66)
+
+    def to_save(self):
+        self.pause()
+        self.hide()
+        save.show()
 
 
 class Entry(QWidget, Ui_Greeting):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.enterBtn.clicked.connect(self.enter)
+
+    def enter(self):
+        self.close()
+        menu.show()
 
 
 class Create(QWidget, Ui_Create):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.GoBackBtn.clicked.connect(self.go_back)
+        self.CreateBtn.clicked.connect(self.create)
+
+    def create(self):
+        self.hide()
+        window.show()
+        window.timer.start(66)
+
+    def go_back(self):
+        self.hide()
+        menu.show()
 
 
 class Load(QWidget, Ui_Load):
@@ -47,6 +74,11 @@ class Load(QWidget, Ui_Load):
         self.model.setData(self.model.index(0, 0), "First save example")
         self.model.insertRow(1)
         self.model.setData(self.model.index(1, 0), "Second save example")
+        self.GoBackBtn.clicked.connect(self.go_back)
+
+    def go_back(self):
+        self.hide()
+        menu.show()
 
 
 class Save(QWidget, Ui_Save):
@@ -60,12 +92,27 @@ class Save(QWidget, Ui_Save):
         self.model.setData(self.model.index(0, 0), "First save example")
         self.model.insertRow(1)
         self.model.setData(self.model.index(1, 0), "Second save example")
+        self.GoBackBtn.clicked.connect(self.go_back)
+
+    def go_back(self):
+        self.hide()
+        window.show()
 
 
 class Menu(QWidget, Ui_Menu):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.CreateBtn.clicked.connect(self.to_create)
+        self.LoadBtn.clicked.connect(self.to_load)
+
+    def to_load(self):
+        self.hide()
+        load.show()
+
+    def to_create(self):
+        self.hide()
+        create.show()
 
 
 FPS = 30
@@ -74,16 +121,13 @@ Frequency = 1 / FPS
 app = QApplication(sys.argv)
 
 Field = Plane(550, 650)
-window = Main(Field)
-entry = Entry()
-create = Create()
-load = Load()
 save = Save()
-load.show()
-save.show()
-create.show()
-entry.show()
-window.show()
+window = Main(Field)
+load = Load()
+create = Create()
 menu = Menu()
-menu.show()
+entry = Entry()
+
+entry.show()
+
 sys.exit(app.exec())
