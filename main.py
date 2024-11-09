@@ -17,11 +17,18 @@ class Main(QMainWindow, Ui_MainWindow):
     def __init__(self, plane: Plane):
         super().__init__()
         self.setupUi(self)
+        self.plane = plane
         plane.painter = QPainter(self)
+
         self.timer = QTimer()
         self.timer.timeout.connect(plane.process)
         self.painter = QPainter(self)
         self.SaveBtn.clicked.connect(self.to_save)
+
+    def process(self):
+        self.plane.painter.begin(self)
+        self.plane.process()
+        self.painter.end()
 
     def pause(self):
         self.timer.stop()
@@ -120,7 +127,7 @@ Frequency = 1 / FPS
 
 app = QApplication(sys.argv)
 
-Field = Plane(550, 650)
+Field = Plane(55, 65)
 save = Save()
 window = Main(Field)
 load = Load()
