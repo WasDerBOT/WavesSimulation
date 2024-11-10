@@ -1,6 +1,6 @@
 import sys
 
-from PyQt6.QtCore import QTimer, QStringListModel
+from PyQt6.QtCore import QTimer, QStringListModel, QEvent
 from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import QApplication, QListView
 from PyQt6.QtWidgets import QWidget, QMainWindow
@@ -17,10 +17,16 @@ class Main(QMainWindow, Ui_MainWindow):
     def __init__(self, plane: Plane):
         super().__init__()
         self.setupUi(self)
+        self.setMouseTracking(True)
         self.plane = plane
         self.timer = QTimer()
         self.timer.timeout.connect(self.process)
         self.SaveBtn.clicked.connect(self.to_save)
+
+    def mousePressEvent(self, e: QEvent):
+        x, y = e.pos().x(), e.pos().y()
+
+        self.plane.shake(x, y)
 
     def process(self):
         self.plane.process()
