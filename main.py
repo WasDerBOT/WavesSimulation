@@ -18,17 +18,20 @@ class Main(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.plane = plane
-        plane.painter = QPainter(self)
-
         self.timer = QTimer()
         self.timer.timeout.connect(plane.process)
-        self.painter = QPainter(self)
         self.SaveBtn.clicked.connect(self.to_save)
 
     def process(self):
-        self.plane.painter.begin(self)
         self.plane.process()
-        self.painter.end()
+        self.update()
+
+    def paintEvent(self, event):
+        painter = QPainter()
+        painter.begin(self)
+        self.plane.draw(painter)
+        painter.end()
+
 
     def pause(self):
         self.timer.stop()
