@@ -19,7 +19,7 @@ class Main(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.plane = plane
         self.timer = QTimer()
-        self.timer.timeout.connect(plane.process)
+        self.timer.timeout.connect(self.process)
         self.SaveBtn.clicked.connect(self.to_save)
 
     def process(self):
@@ -107,6 +107,7 @@ class Save(QWidget, Ui_Save):
     def go_back(self):
         self.hide()
         window.show()
+        window.timer.start(70)
 
 
 class Menu(QWidget, Ui_Menu):

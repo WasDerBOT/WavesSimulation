@@ -13,14 +13,17 @@ class Point:
         self.is_unmovable = is_unmovable
 
     def draw(self, painter: QPainter):
-        temp = int((self.height + 1) * 255 / 2)
+        temp = 255 - int((self.height + 1) * 255 / 2)
         painter.fillRect(self.x * 10, self.y * 10, 10, 10, QColor(temp, temp, temp))
 
     def __str__(self):
         return f'x: {self.x}, y: {self.y}, height: {self.height} \n'
 
-    def process(self, force):
-        self.velocity += force / (T * self.mass * 10)
+    def process(self, dx):
+
+        force = dx
+        self.velocity += force * T / (self.mass * 10)
+        print(self.velocity)
         self.height = max(min(self.height + self.velocity, 1), -1)
 
 
@@ -40,6 +43,6 @@ class Plane:
 
         for i in range(1, self.height - 1):
             for j in range(1, self.width - 1):
-                force = self.points[i - 1][j].height + self.points[i + 1][j].height + self.points[i][j - 1].height + \
-                        self.points[i][j + 1].height
-                self.points[i][j].process(force)
+                dx = (self.points[i - 1][j].height + self.points[i + 1][j].height + self.points[i][j - 1].height + \
+                        self.points[i][j + 1].height) / 4 - self.points[i][j].height
+                self.points[i][j].process(dx)
