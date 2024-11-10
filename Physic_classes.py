@@ -35,8 +35,11 @@ class Plane:
     def __init__(self, height, width):
         self.height = height
         self.width = width
-        self.points = [[Point(i, k, 1, 0.5, 0) for i in range(width)] for k in range(height)]
+        self.reset()
         self.painter = None
+
+    def reset(self):
+        self.points = [[Point(i, k, 1, 0.5, 0) for i in range(self.width)] for k in range(self.height)]
 
     def draw(self, painter):
         for i in range(1, self.height - 1):
@@ -54,7 +57,7 @@ class Plane:
 
                 tx = self.points[i][j].x - x
                 ty = self.points[i][j].y - y
-                r = sqrt((tx) ** 2 + (ty) ** 2)
+                r = sqrt(tx ** 2 + ty ** 2)
                 if 0 < r <= (size / 2):
                     self.points[i][j].height += cos(r * pi / size)
                     self.points[i][j].normalize_height()

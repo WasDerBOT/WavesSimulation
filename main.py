@@ -4,13 +4,14 @@ from PyQt6.QtCore import QTimer, QStringListModel, QEvent
 from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import QApplication, QListView
 from PyQt6.QtWidgets import QWidget, QMainWindow
-from templates.main_window import Ui_MainWindow
-from templates.entry import Ui_Greeting
-from templates.create import Ui_Create
-from templates.load import Ui_Load
-from templates.save import Ui_Save
-from templates.menu import Ui_Menu
+
 from Physic_classes import Plane
+from templates.create import Ui_Create
+from templates.entry import Ui_Greeting
+from templates.load import Ui_Load
+from templates.main_window import Ui_MainWindow
+from templates.menu import Ui_Menu
+from templates.save import Ui_Save
 
 
 class Main(QMainWindow, Ui_MainWindow):
@@ -22,11 +23,19 @@ class Main(QMainWindow, Ui_MainWindow):
         self.timer = QTimer()
         self.timer.timeout.connect(self.process)
         self.SaveBtn.clicked.connect(self.to_save)
+        self.ResetBtn.clicked.connect(self.reset)
+        self.IsGoing = True
+        self.Play_PauseBtn.clicked.connect(self.pause)
 
     def mousePressEvent(self, e: QEvent):
         x, y = e.pos().x(), e.pos().y()
 
         self.plane.shake(x, y)
+        self.update()
+
+    def reset(self):
+        self.plane.reset()
+        self.update()
 
     def process(self):
         self.plane.process()
@@ -38,12 +47,17 @@ class Main(QMainWindow, Ui_MainWindow):
         self.plane.draw(painter)
         painter.end()
 
-
     def pause(self):
         self.timer.stop()
+        self.IsGoing = False
+        self.Play_PauseBtn.clicked.connect(self.resume)
+        self.Play_PauseBtn.setText("Play")
 
     def resume(self):
-        self.timer.start(66)
+        self.timer.start(30)
+        self.IsGoing = False
+        self.Play_PauseBtn.clicked.connect(self.pause)
+        self.Play_PauseBtn.setText("Play")
 
     def to_save(self):
         self.pause()

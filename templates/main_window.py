@@ -69,7 +69,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Wave simulation"))
-        self.Play_PauseBtn.setText(_translate("MainWindow", "Play"))
+        self.Play_PauseBtn.setText(_translate("MainWindow", "Pause"))
         self.ResetBtn.setText(_translate("MainWindow", "Reset"))
         self.label.setText(_translate("MainWindow", "Size of brush"))
         self.MenuBtn.setText(_translate("MainWindow", "Menu"))
