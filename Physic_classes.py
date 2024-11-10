@@ -14,9 +14,7 @@ class Point:
 
     def draw(self, painter: QPainter):
         temp = int((self.height + 1) * 255 / 2)
-        color = QColor.fromRgba64(temp, temp, temp, 255)
-        painter.setBrush(color)
-        painter.drawRect(self.x * 10, self.y * 10, 10, 10)
+        painter.fillRect(self.x * 10, self.y * 10, 10, 10, QColor(temp, temp, temp))
 
     def __str__(self):
         return f'x: {self.x}, y: {self.y}, height: {self.height} \n'
