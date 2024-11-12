@@ -3,7 +3,7 @@ from math import cos, sqrt, pi
 from PyQt6.QtGui import QPainter, QColor
 
 T = 0.066  # Period
-k = 5
+k = 10
 
 
 class Point:
@@ -69,7 +69,7 @@ class Plane:
                 tx = self.points[i][j].x - x
                 ty = self.points[i][j].y - y
                 r = sqrt(tx ** 2 + ty ** 2)
-                if 0 < r <= (size / 2):
+                if r <= (size / 2):
                     self.points[i][j].height = cos(r * pi / size)
                     print(self.points[i][j].height)
                     self.points[i][j].normalize_fields()
