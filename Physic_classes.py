@@ -22,24 +22,24 @@ class Point:
         painter.fillRect(self.x * tempCellSize, self.y * tempCellSize, tempCellSize, tempCellSize,
                          QColor(temp, temp, temp))
 
-        def __str__(self):
-            return f'x: {self.x}, y: {self.y}, height: {self.height} \n'
+    def __str__(self):
+        return f'x: {self.x}, y: {self.y}, height: {self.height} \n'
 
-        def normalize_fields(self):
-            self.height = max(-1, min(1, self.height))
-            self.height = max(-1, min(1, self.velocity))
+    def normalize_fields(self):
+        self.height = max(-1, min(1, self.height))
+        self.height = max(-1, min(1, self.velocity))
 
-        def process(self, dx):
-            force = dx * k
-            self.velocity += force * T / self.mass
-            self.height = max(min(self.height + self.velocity, 1), -1)
+    def process(self, dx):
+        force = dx * k
+        self.velocity += force * T / self.mass
+        self.height = max(min(self.height + self.velocity, 1), -1)
 
 
 class Plane:
     def __init__(self, height, width):
         self.height = height
         self.width = width
-        self.cellSize = 550 / height
+        self.cellSize = (550 / height)
         self.reset()
         self.painter = None
 
@@ -54,7 +54,7 @@ class Plane:
                 self.points[i][j].draw(painter)
 
     def shake(self, x, y):
-        tempCellSize = int(self.plane.cellSize)
+        tempCellSize = int(self.cellSize)
         x //= tempCellSize
         y //= tempCellSize
         print(tempCellSize)
@@ -73,8 +73,9 @@ class Plane:
                     self.points[i][j].normalize_fields()
 
     def process(self):
-        if self.width == 1 and self.height == 1:
+        if self.width < 5 and self.height < 5:
             return
+
         for i in range(1, self.height - 1):
             for j in range(1, self.width - 1):
                 dx = (self.points[i - 1][j].height + self.points[i + 1][j].height + self.points[i][j - 1].height + \

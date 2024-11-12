@@ -88,6 +88,17 @@ class Create(QWidget, Ui_Create):
         self.setupUi(self)
         self.GoBackBtn.clicked.connect(self.go_back)
         self.CreateBtn.clicked.connect(self.create)
+        self.horizontalSlider.valueChanged.connect(self.update_labels)
+        height = int(tHeight * 1 * 0.2)
+        width = int(tWidth * 1 * 0.2)
+        self.ResolutionLbl.setText(f"Resolution: {width} x {height} points")
+        self.TotalPointsLbl.setText(f"Total points: {height * width}")
+    def update_labels(self):
+        value = self.horizontalSlider.value()
+        height = int(tHeight * value * 0.2)
+        width = int(tWidth * value * 0.2)
+        self.ResolutionLbl.setText(f"Resolution: {width} x {height} points")
+        self.TotalPointsLbl.setText(f"Total points: {height * width}")
 
     def create(self):
         value = self.horizontalSlider.value()
