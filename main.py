@@ -30,7 +30,6 @@ class Main(QMainWindow, Ui_MainWindow):
         self.Play_PauseBtn.clicked.connect(self.pause)
 
     def init_plane(self, plane: Plane):
-
         self.plane = plane
         print("2")
 
@@ -98,7 +97,6 @@ class Create(QWidget, Ui_Create):
         self.hide()
         window.show()
         window.timer.start(66)
-
 
     def go_back(self):
         self.hide()
