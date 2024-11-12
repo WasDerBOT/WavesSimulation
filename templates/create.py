@@ -24,6 +24,7 @@ class Ui_Create(object):
         self.horizontalSlider.setGeometry(QtCore.QRect(50, 440, 711, 61))
         self.horizontalSlider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.horizontalSlider.setObjectName("horizontalSlider")
+        self.horizontalSlider.setRange(1, 10)
         self.label = QtWidgets.QLabel(parent=Create)
         self.label.setGeometry(QtCore.QRect(60, 160, 701, 91))
         font = QtGui.QFont()

@@ -13,19 +13,26 @@ from templates.main_window import Ui_MainWindow
 from templates.menu import Ui_Menu
 from templates.save import Ui_Save
 
+tHeight, tWidth = 55, 65
+
 
 class Main(QMainWindow, Ui_MainWindow):
-    def __init__(self, plane: Plane):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setMouseTracking(True)
-        self.plane = plane
+        self.plane = Plane(55, 65)
         self.timer = QTimer()
         self.timer.timeout.connect(self.process)
         self.SaveBtn.clicked.connect(self.to_save)
         self.ResetBtn.clicked.connect(self.reset)
         self.IsGoing = True
         self.Play_PauseBtn.clicked.connect(self.pause)
+
+    def init_plane(self, plane: Plane):
+
+        self.plane = plane
+        print("2")
 
     def mousePressEvent(self, e: QEvent):
         x, y = e.pos().x(), e.pos().y()
@@ -84,9 +91,14 @@ class Create(QWidget, Ui_Create):
         self.CreateBtn.clicked.connect(self.create)
 
     def create(self):
+        value = self.horizontalSlider.value()
+        height = int(tHeight * value * 0.2)
+        width = int(tWidth * value * 0.2)
+        window.plane = Plane(height, width)
         self.hide()
         window.show()
         window.timer.start(66)
+
 
     def go_back(self):
         self.hide()
@@ -127,7 +139,7 @@ class Save(QWidget, Ui_Save):
     def go_back(self):
         self.hide()
         window.show()
-        window.timer.start(70)
+        window.timer.start(30)
 
 
 class Menu(QWidget, Ui_Menu):
@@ -147,13 +159,14 @@ class Menu(QWidget, Ui_Menu):
 
 
 FPS = 30
+T = 1000 / FPS
 Frequency = 1 / FPS
 
 app = QApplication(sys.argv)
 
-Field = Plane(55, 65)
+Field = Plane(110, 130)
 save = Save()
-window = Main(Field)
+window = Main()
 load = Load()
 create = Create()
 menu = Menu()
