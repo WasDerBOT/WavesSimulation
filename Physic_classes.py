@@ -27,12 +27,16 @@ class Point:
 
     def normalize_fields(self):
         self.height = max(-1, min(1, self.height))
-        self.height = max(-1, min(1, self.velocity))
+        self.velocity = max(-1, min(1, self.velocity))
 
-    def process(self, dx):
+    def process_velocities(self, dx):
         force = dx * k
         self.velocity += force * T / self.mass
-        self.height = max(min(self.height + self.velocity, 1), -1)
+        self.normalize_fields()
+        self.normalize_fields()
+
+    def process_heights(self):
+        self.height += self.velocity
 
 
 class Plane:
@@ -57,19 +61,17 @@ class Plane:
         tempCellSize = int(self.cellSize)
         x //= tempCellSize
         y //= tempCellSize
-        print(tempCellSize)
-        size = 5
+        size = 15
         left_up, right_down = ((max(0, x - size // 2)), max(0, y - size // 2)), (
             min(self.width - 1, x + size // 2), min((self.height - 1), y + size // 2))
         for i in range(left_up[1], right_down[1]):
             for j in range(left_up[0], right_down[0]):
-
                 tx = self.points[i][j].x - x
                 ty = self.points[i][j].y - y
                 r = sqrt(tx ** 2 + ty ** 2)
                 if 0 < r <= (size / 2):
-                    self.points[i][j].velocity += cos(r * pi / size) / 100
-                    self.points[i][j].normalize_fields()
+                    self.points[i][j].height = cos(r * pi / size)
+                    print(self.points[i][j].height)
                     self.points[i][j].normalize_fields()
 
     def process(self):
@@ -80,4 +82,8 @@ class Plane:
             for j in range(1, self.width - 1):
                 dx = (self.points[i - 1][j].height + self.points[i + 1][j].height + self.points[i][j - 1].height + \
                       self.points[i][j + 1].height) / 4 - self.points[i][j].height
-                self.points[i][j].process(dx)
+                self.points[i][j].process_velocities(dx)
+
+        for i in range(1, self.height - 1):
+            for j in range(1, self.width - 1):
+                self.points[i][j].process_heights()
