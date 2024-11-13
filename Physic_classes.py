@@ -2,8 +2,14 @@ from math import cos, sqrt, pi
 
 from PyQt6.QtGui import QPainter, QColor
 
-T = 0.066  # Period
+T = 1 / 30  # Period
 k = 20
+
+
+def kabs(num):
+    if num > 0:
+        return num
+    return 0
 
 
 class Point:
@@ -78,6 +84,7 @@ class Plane:
         x //= tempCellSize
         y //= tempCellSize
         size = self.brush_size
+
         left_up, right_down = ((max(0, x - size // 2)), max(0, y - size // 2)), (
             min(self.width - 1, x + size // 2), min((self.height - 1), y + size // 2))
         for i in range(left_up[1], right_down[1]):
@@ -85,8 +92,8 @@ class Plane:
                 tx = self.points[i][j].x - x
                 ty = self.points[i][j].y - y
                 r = sqrt(tx ** 2 + ty ** 2)
-                if r <= (size / 2):
-                    self.points[i][j].height = cos(r * pi / size)
+                if r <= (size / 2) :
+                    self.points[i][j].height = kabs(cos(tx * pi / (size / 2)) * cos(0 * ty * pi / (sqrt(size**2 - tx**2))) - abs(tx) / (size / 2) - (ty / (size / 2))**2)
                     self.points[i][j].normalize_fields()
 
     def process(self):

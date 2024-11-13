@@ -14,6 +14,8 @@ from templates.menu import Ui_Menu
 from templates.save import Ui_Save
 
 tHeight, tWidth = 55, 65
+FPS = 30
+T = 1000 // FPS
 
 
 class Main(QMainWindow, Ui_MainWindow):
@@ -35,7 +37,6 @@ class Main(QMainWindow, Ui_MainWindow):
 
     def init_plane(self, plane: Plane):
         self.plane = plane
-        print("2")
 
     def mousePressEvent(self, event: QEvent):
         x, y = event.pos().x(), event.pos().y()
@@ -66,7 +67,7 @@ class Main(QMainWindow, Ui_MainWindow):
         self.Play_PauseBtn.setText("Play")
 
     def resume(self):
-        self.timer.start(30)
+        self.timer.start(T)
         self.IsGoing = False
         self.Play_PauseBtn.clicked.connect(self.pause)
         self.Play_PauseBtn.setText("Play")
@@ -114,7 +115,7 @@ class Create(QWidget, Ui_Create):
         window.plane = Plane(height, width)
         self.hide()
         window.show()
-        window.timer.start(66)
+        window.timer.start(T)
 
     def go_back(self):
         self.hide()
@@ -173,10 +174,6 @@ class Menu(QWidget, Ui_Menu):
         self.hide()
         create.show()
 
-
-FPS = 30
-T = 1000 / FPS
-Frequency = 1 / FPS
 
 app = QApplication(sys.argv)
 
