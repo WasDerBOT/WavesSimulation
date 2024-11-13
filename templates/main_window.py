@@ -35,6 +35,7 @@ class Ui_MainWindow(object):
         self.horizontalSlider.setGeometry(QtCore.QRect(670, 240, 121, 20))
         self.horizontalSlider.setOrientation(QtCore.Qt.Orientation.Horizontal)
         self.horizontalSlider.setObjectName("horizontalSlider")
+        self.horizontalSlider.setRange(10, 50)
         self.label = QtWidgets.QLabel(parent=self.centralwidget)
         self.label.setGeometry(QtCore.QRect(670, 190, 111, 51))
         font = QtGui.QFont()

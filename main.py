@@ -28,6 +28,10 @@ class Main(QMainWindow, Ui_MainWindow):
         self.ResetBtn.clicked.connect(self.reset)
         self.IsGoing = True
         self.Play_PauseBtn.clicked.connect(self.pause)
+        self.horizontalSlider.valueChanged.connect(self.set_brush_size)
+
+    def set_brush_size(self):
+        self.plane.brush_size = self.horizontalSlider.value()
 
     def init_plane(self, plane: Plane):
         self.plane = plane

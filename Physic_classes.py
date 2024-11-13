@@ -77,7 +77,7 @@ class Plane:
         tempCellSize = int(self.cellSize)
         x //= tempCellSize
         y //= tempCellSize
-        size = 15
+        size = self.brush_size
         left_up, right_down = ((max(0, x - size // 2)), max(0, y - size // 2)), (
             min(self.width - 1, x + size // 2), min((self.height - 1), y + size // 2))
         for i in range(left_up[1], right_down[1]):
