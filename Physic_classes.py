@@ -36,6 +36,8 @@ class Point:
         self.velocity = max(-1, min(1, self.velocity))
 
     def process_velocities(self, dx):
+        if self.is_unmovable:
+            return
         force = dx * k
         self.velocity += force * T / self.mass
         self.normalize_fields()
@@ -77,7 +79,8 @@ class Plane:
                 ty = self.points[i][j].y - y
                 r = sqrt(tx ** 2 + ty ** 2)
                 if r <= (size / 2):
-                    self.points[i][j].mass = 10
+                    self.points[i][j].is_unmovable = True
+                    self.points[i][j].mass = 100
 
     def shake(self, x, y):
         tempCellSize = int(self.cellSize)
