@@ -23,10 +23,12 @@ class Point:
         self.plane = plane
 
     def draw(self, painter: QPainter):
-        temp = 255 - int((self.height + 1) * 255 / 2)
+        h = self.height
+        temp = 255 - int((h + 1) * 255 / 2)
         tempCellSize = int(self.plane.cellSize)
         painter.fillRect(self.x * tempCellSize, self.y * tempCellSize, tempCellSize, tempCellSize,
-                         QColor(temp, temp, int(((temp / 255) ** (1 / self.mass)) * 255)))
+                         QColor(temp, int(((temp / 255) ** (1 / self.mass)) * 255),
+                                int(((temp / 255) ** (1 / self.mass ** 2)) * 255)))
 
     def __str__(self):
         return f'x: {self.x}, y: {self.y}, height: {self.height} \n'
@@ -80,7 +82,7 @@ class Plane:
                 r = sqrt(tx ** 2 + ty ** 2)
                 if r <= (size / 2):
                     self.points[i][j].is_unmovable = True
-                    self.points[i][j].mass = 100
+                    self.points[i][j].mass = 10
 
     def shake(self, x, y):
         tempCellSize = int(self.cellSize)
@@ -95,8 +97,10 @@ class Plane:
                 tx = self.points[i][j].x - x
                 ty = self.points[i][j].y - y
                 r = sqrt(tx ** 2 + ty ** 2)
-                if r <= (size / 2) :
-                    self.points[i][j].height = kabs(cos(tx * pi / (size / 2)) * cos(0 * ty * pi / (sqrt(size**2 - tx**2))) - abs(tx) / (size / 2) - (ty / (size / 2))**2)
+                if r <= (size / 2):
+                    self.points[i][j].height = kabs(
+                        cos(tx * pi / (size / 2)) * cos(0 * ty * pi / (sqrt(size ** 2 - tx ** 2))) - abs(tx) / (
+                                    size / 2) - (ty / (size / 2)) ** 4)
                     self.points[i][j].normalize_fields()
 
     def process(self):
