@@ -3,7 +3,7 @@ from math import cos, sqrt, pi
 from PyQt6.QtGui import QPainter, QColor
 
 T = 0.066  # Period
-k = 10
+k = 20
 
 
 class Point:
@@ -20,7 +20,7 @@ class Point:
         temp = 255 - int((self.height + 1) * 255 / 2)
         tempCellSize = int(self.plane.cellSize)
         painter.fillRect(self.x * tempCellSize, self.y * tempCellSize, tempCellSize, tempCellSize,
-                         QColor(temp, temp, int(((temp / 255)**(1 / self.mass)) * 255)))
+                         QColor(temp, temp, int(((temp / 255) ** (1 / self.mass)) * 255)))
 
     def __str__(self):
         return f'x: {self.x}, y: {self.y}, height: {self.height} \n'
@@ -46,6 +46,7 @@ class Plane:
         self.cellSize = (550 / height)
         self.reset()
         self.painter = None
+        self.brush_size = 15
 
     def reset(self):
         self.points = [[Point(i, k, 1, 0, 0, plane=self) for i in range(self.width)] for k in range(self.height)]
@@ -61,7 +62,7 @@ class Plane:
         tempCellSize = int(self.cellSize)
         x //= tempCellSize
         y //= tempCellSize
-        size = 15
+        size = self.brush_size
         left_up, right_down = ((max(0, x - size // 2)), max(0, y - size // 2)), (
             min(self.width - 1, x + size // 2), min((self.height - 1), y + size // 2))
         for i in range(left_up[1], right_down[1]):
