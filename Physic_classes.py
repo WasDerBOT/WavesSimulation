@@ -20,7 +20,7 @@ class Point:
         temp = 255 - int((self.height + 1) * 255 / 2)
         tempCellSize = int(self.plane.cellSize)
         painter.fillRect(self.x * tempCellSize, self.y * tempCellSize, tempCellSize, tempCellSize,
-                         QColor(temp, temp, temp))
+                         QColor(temp, temp, int(((temp / 255)**(1 / self.mass)) * 255)))
 
     def __str__(self):
         return f'x: {self.x}, y: {self.y}, height: {self.height} \n'
@@ -57,6 +57,21 @@ class Plane:
             for j in range(1, self.width - 1):
                 self.points[i][j].draw(painter)
 
+    def change_env(self, x, y):
+        tempCellSize = int(self.cellSize)
+        x //= tempCellSize
+        y //= tempCellSize
+        size = 15
+        left_up, right_down = ((max(0, x - size // 2)), max(0, y - size // 2)), (
+            min(self.width - 1, x + size // 2), min((self.height - 1), y + size // 2))
+        for i in range(left_up[1], right_down[1]):
+            for j in range(left_up[0], right_down[0]):
+                tx = self.points[i][j].x - x
+                ty = self.points[i][j].y - y
+                r = sqrt(tx ** 2 + ty ** 2)
+                if r <= (size / 2):
+                    self.points[i][j].mass = 10
+
     def shake(self, x, y):
         tempCellSize = int(self.cellSize)
         x //= tempCellSize
@@ -71,7 +86,6 @@ class Plane:
                 r = sqrt(tx ** 2 + ty ** 2)
                 if r <= (size / 2):
                     self.points[i][j].height = cos(r * pi / size)
-                    print(self.points[i][j].height)
                     self.points[i][j].normalize_fields()
 
     def process(self):

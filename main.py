@@ -1,6 +1,6 @@
 import sys
 
-from PyQt6.QtCore import QTimer, QStringListModel, QEvent
+from PyQt6.QtCore import QTimer, QStringListModel, QEvent, Qt
 from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import QApplication, QListView
 from PyQt6.QtWidgets import QWidget, QMainWindow
@@ -33,10 +33,12 @@ class Main(QMainWindow, Ui_MainWindow):
         self.plane = plane
         print("2")
 
-    def mousePressEvent(self, e: QEvent):
-        x, y = e.pos().x(), e.pos().y()
-
-        self.plane.shake(x, y)
+    def mousePressEvent(self, event: QEvent):
+        x, y = event.pos().x(), event.pos().y()
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.plane.shake(x, y)
+        elif event.button() == Qt.MouseButton.RightButton:
+            self.plane.change_env(x, y)
         self.update()
 
     def reset(self):
