@@ -1,3 +1,4 @@
+import sqlite3
 import sys
 
 from PyQt6.QtCore import QTimer, QStringListModel, QEvent, Qt
@@ -16,6 +17,12 @@ from templates.save import Ui_Save
 tHeight, tWidth = 55, 65
 FPS = 30
 T = 1000 // FPS
+
+conn = sqlite3.connect('fields.db')
+c = conn.cursor()
+c.execute('''CREATE TABLE IF NOT EXISTS fields (id INTEGER PRIMARY KEY, name TEXT, file_name TEXT)''')
+
+conn.commit()
 
 
 class Main(QMainWindow, Ui_MainWindow):
@@ -147,16 +154,21 @@ class Save(QWidget, Ui_Save):
         self.listView = self.findChild(QListView, "listView")
         self.model = QStringListModel()
         self.listView.setModel(self.model)
-        self.model.insertRow(0)
-        self.model.setData(self.model.index(0, 0), "First save example")
-        self.model.insertRow(1)
-        self.model.setData(self.model.index(1, 0), "Second save example")
         self.GoBackBtn.clicked.connect(self.go_back)
+        self.SaveBtn.clicked.connect(self.save)
 
     def go_back(self):
         self.hide()
         window.show()
         window.timer.start(30)
+
+    def save(self):
+        name = self.lineEdit.text()
+        c.execute(f"INSERT INTO fields VALUES('{name}', '{name}.txt')")
+
+    def list_update(self):
+        while self.model.rowCount():
+            self.model.removeRow()
 
 
 class Menu(QWidget, Ui_Menu):
@@ -178,6 +190,7 @@ class Menu(QWidget, Ui_Menu):
 app = QApplication(sys.argv)
 
 Field = Plane(110, 130)
+
 save = Save()
 window = Main()
 load = Load()
