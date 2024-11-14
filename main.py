@@ -1,3 +1,4 @@
+import os
 import sqlite3
 import sys
 
@@ -21,8 +22,6 @@ T = 1000 // FPS
 conn = sqlite3.connect('fields.db')
 c = conn.cursor()
 c.execute('''CREATE TABLE IF NOT EXISTS fields (id INTEGER PRIMARY KEY, name TEXT, file_name TEXT)''')
-
-conn.commit()
 
 
 class Main(QMainWindow, Ui_MainWindow):
@@ -136,16 +135,20 @@ class Load(QWidget, Ui_Load):
         self.listView = self.findChild(QListView, "listView")
         self.model = QStringListModel()
         self.listView.setModel(self.model)
-        self.model.insertRow(0)
-        self.model.setData(self.model.index(0, 0), "First save example")
-        self.model.insertRow(1)
-        self.model.setData(self.model.index(1, 0), "Second save example")
         self.GoBackBtn.clicked.connect(self.go_back)
 
     def go_back(self):
         self.hide()
         menu.show()
 
+    def list_update(self):
+
+        while self.model.rowCount():
+            self.model.removeRow(0)
+        data = c.execute("SELECT * FROM fields").fetchall()
+        for line in data:
+            self.model.insertRow(self.model.rowCount())
+            self.model.setData(self.model.index(self.model.rowCount() - 1, 0), line[1])
 
 class Save(QWidget, Ui_Save):
     def __init__(self):
@@ -156,6 +159,7 @@ class Save(QWidget, Ui_Save):
         self.listView.setModel(self.model)
         self.GoBackBtn.clicked.connect(self.go_back)
         self.SaveBtn.clicked.connect(self.save)
+        self.list_update()
 
     def go_back(self):
         self.hide()
@@ -164,11 +168,24 @@ class Save(QWidget, Ui_Save):
 
     def save(self):
         name = self.lineEdit.text()
-        c.execute(f"INSERT INTO fields VALUES('{name}', '{name}.txt')")
+        with open(f"saves/{name}.txt", mode="w") as f:
+            f.write(str(window.plane.height) + "\n" + str(window.plane.width) + "\n")
+            for i in range(0, window.plane.height):
+                for j in range(0, window.plane.width):
+                    f.write(str(window.plane.points[i][j].mass) + "\n")
+
+        c.execute(f"INSERT INTO fields(name, file_name)  VALUES('{name}', '{name}.txt')")
+        conn.commit()
+        self.list_update()
 
     def list_update(self):
+
         while self.model.rowCount():
-            self.model.removeRow()
+            self.model.removeRow(0)
+        data = c.execute("SELECT * FROM fields").fetchall()
+        for line in data:
+            self.model.insertRow(self.model.rowCount())
+            self.model.setData(self.model.index(self.model.rowCount() - 1, 0), line[1])
 
 
 class Menu(QWidget, Ui_Menu):
@@ -186,6 +203,11 @@ class Menu(QWidget, Ui_Menu):
         self.hide()
         create.show()
 
+
+try:
+    os.mkdir("saves")
+except FileExistsError:
+    pass
 
 app = QApplication(sys.argv)
 
