@@ -7,7 +7,7 @@ from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import QApplication, QListView
 from PyQt6.QtWidgets import QWidget, QMainWindow
 
-from Physic_classes import Plane
+from Physic_classes import Plane, Point
 from templates.create import Ui_Create
 from templates.entry import Ui_Greeting
 from templates.load import Ui_Load
@@ -136,10 +136,33 @@ class Load(QWidget, Ui_Load):
         self.model = QStringListModel()
         self.listView.setModel(self.model)
         self.GoBackBtn.clicked.connect(self.go_back)
+        self.LoadBtn.clicked.connect(self.load)
+        self.list_update()
 
     def go_back(self):
         self.hide()
         menu.show()
+
+    def load(self):
+        name = self.model.itemData(self.listView.currentIndex())
+        file_name = c.execute(f"SELECT file_name FROM fields WHERE name = '{name[0]}'").fetchall()[0][0]
+        with open(f"saves/{file_name}") as f:
+            masses = f.readlines()
+        height = int(masses[0])
+        width = int(masses[1])
+        print(height, width)
+        masses.pop(0)
+        masses.pop(0)
+        window.plane = Plane(height, width)
+
+        for i in range(0, height):
+            for j in range(0, width):
+                window.plane.points[i][j].mass = int(masses[i * width + j])
+                window.plane.initial_points[i][j].mass = int(masses[i * width + j])
+
+        self.hide()
+        window.show()
+        window.timer.start(T)
 
     def list_update(self):
 
@@ -149,6 +172,7 @@ class Load(QWidget, Ui_Load):
         for line in data:
             self.model.insertRow(self.model.rowCount())
             self.model.setData(self.model.index(self.model.rowCount() - 1, 0), line[1])
+
 
 class Save(QWidget, Ui_Save):
     def __init__(self):

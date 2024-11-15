@@ -30,6 +30,9 @@ class Point:
                          QColor(temp, int(((temp / 255) ** (1 / self.mass)) * 255),
                                 int(((temp / 255) ** (1 / self.mass ** 2)) * 255)))
 
+    def __copy__(self):
+        return Point(self.x, self.y, self.mass, self.height, self.velocity, self.plane, is_unmovable=self.is_unmovable)
+
     def __str__(self):
         return f'x: {self.x}, y: {self.y}, height: {self.height} \n'
 
@@ -54,12 +57,18 @@ class Plane:
         self.height = height
         self.width = width
         self.cellSize = (550 / height)
-        self.reset()
+        self.points = [[Point(i, k, 1, 0, 0, plane=self) for i in range(self.width)] for k in
+                               range(self.height)]
         self.painter = None
         self.brush_size = 15
+        self.initial_points = [[Point(i, k, 1, 0, 0, plane=self) for i in range(self.width)] for k in
+                               range(self.height)]
+        self.reset()
 
     def reset(self):
-        self.points = [[Point(i, k, 1, 0, 0, plane=self) for i in range(self.width)] for k in range(self.height)]
+        for i in range(0, self.height):
+            for j in range(0, self.width):
+                self.points[i][j] = self.initial_points[i][j].__copy__()
 
     def draw(self, painter):
         if self.width == 1 and self.height == 1:
@@ -100,7 +109,7 @@ class Plane:
                 if r <= (size / 2):
                     self.points[i][j].height = kabs(
                         cos(tx * pi / (size / 2)) * cos(0 * ty * pi / (sqrt(size ** 2 - tx ** 2))) - abs(tx) / (
-                                    size / 2) - (ty / (size / 2)) ** 4)
+                                size / 2) - (ty / (size / 2)) ** 4)
                     self.points[i][j].normalize_fields()
 
     def process(self):
