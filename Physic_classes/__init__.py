@@ -92,7 +92,6 @@ class Plane:
                 if r <= (size / 2):
                     self.points[i][j].mass = 5
 
-
     def shake(self, x, y):
         temp_cell_size = int(self.cellSize)
         x //= temp_cell_size
