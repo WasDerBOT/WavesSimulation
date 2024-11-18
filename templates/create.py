@@ -13,6 +13,7 @@ class Ui_Create(object):
     def setupUi(self, Create):
         Create.setObjectName("Create")
         Create.resize(800, 600)
+        Create.setFixedSize(800, 600)
         self.tittle = QtWidgets.QLabel(parent=Create)
         self.tittle.setGeometry(QtCore.QRect(10, 10, 781, 111))
         font = QtGui.QFont()

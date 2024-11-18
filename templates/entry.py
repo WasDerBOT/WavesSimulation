@@ -13,6 +13,7 @@ class Ui_Greeting(object):
     def setupUi(self, Greeting):
         Greeting.setObjectName("Greeting")
         Greeting.resize(800, 600)
+        Greeting.setFixedSize(800, 600)
         self.tittle = QtWidgets.QLabel(parent=Greeting)
         self.tittle.setGeometry(QtCore.QRect(20, 10, 761, 241))
         font = QtGui.QFont()

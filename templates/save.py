@@ -13,6 +13,7 @@ class Ui_Save(object):
     def setupUi(self, Save):
         Save.setObjectName("Save")
         Save.resize(800, 600)
+        Save.setFixedSize(800, 600)
         self.SaveBtn = QtWidgets.QPushButton(parent=Save)
         self.SaveBtn.setGeometry(QtCore.QRect(300, 420, 211, 61))
         font = QtGui.QFont()

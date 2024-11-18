@@ -7,7 +7,8 @@ from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import QApplication, QListView
 from PyQt6.QtWidgets import QWidget, QMainWindow
 
-from Physic_classes import Plane, Point
+from Physic_classes import Plane
+from config import *
 from templates.create import Ui_Create
 from templates.entry import Ui_Greeting
 from templates.load import Ui_Load
@@ -16,8 +17,6 @@ from templates.menu import Ui_Menu
 from templates.save import Ui_Save
 
 tHeight, tWidth = 55, 65
-FPS = 30
-T = 1000 // FPS
 
 conn = sqlite3.connect('fields.db')
 c = conn.cursor()
@@ -29,17 +28,20 @@ class Main(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.setMouseTracking(True)
+        # Создаем заглушку плоскости
         self.plane = Plane(55, 65)
+        # Создаем таймер для опработки физики
         self.timer = QTimer()
         self.timer.timeout.connect(self.process)
         self.SaveBtn.clicked.connect(self.to_save)
         self.ResetBtn.clicked.connect(self.reset)
+        self.MenuBtn.clicked.connect(self.to_menu)
         self.IsGoing = True
         self.Play_PauseBtn.clicked.connect(self.pause)
-        self.horizontalSlider.valueChanged.connect(self.set_brush_size)
+        self.BrushSizeHorizontalSlider.valueChanged.connect(self.set_brush_size)
 
     def set_brush_size(self):
-        self.plane.brush_size = self.horizontalSlider.value()
+        self.plane.brush_size = self.BrushSizeHorizontalSlider.value()
 
     def init_plane(self, plane: Plane):
         self.plane = plane
@@ -70,7 +72,7 @@ class Main(QMainWindow, Ui_MainWindow):
         self.timer.stop()
         self.IsGoing = False
         self.Play_PauseBtn.clicked.connect(self.resume)
-        self.Play_PauseBtn.setText("Play")
+        self.Play_PauseBtn.setText("Pause")
 
     def resume(self):
         self.timer.start(T)
@@ -82,6 +84,11 @@ class Main(QMainWindow, Ui_MainWindow):
         self.pause()
         self.hide()
         save.show()
+
+    def to_menu(self):
+        self.pause()
+        self.hide()
+        menu.show()
 
 
 class Entry(QWidget, Ui_Greeting):
@@ -150,7 +157,6 @@ class Load(QWidget, Ui_Load):
             masses = f.readlines()
         height = int(masses[0])
         width = int(masses[1])
-        print(height, width)
         masses.pop(0)
         masses.pop(0)
         window.plane = Plane(height, width)
@@ -201,6 +207,7 @@ class Save(QWidget, Ui_Save):
         c.execute(f"INSERT INTO fields(name, file_name)  VALUES('{name}', '{name}.txt')")
         conn.commit()
         self.list_update()
+        self.lineEdit.clear()
 
     def list_update(self):
 
@@ -222,12 +229,14 @@ class Menu(QWidget, Ui_Menu):
     def to_load(self):
         self.hide()
         load.show()
+        load.list_update()
 
     def to_create(self):
         self.hide()
         create.show()
 
 
+# Создание папки для сохранений
 try:
     os.mkdir("saves")
 except FileExistsError:
@@ -235,8 +244,7 @@ except FileExistsError:
 
 app = QApplication(sys.argv)
 
-Field = Plane(110, 130)
-
+# Создаем окна
 save = Save()
 window = Main()
 load = Load()

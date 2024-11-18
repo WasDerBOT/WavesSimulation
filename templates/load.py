@@ -13,6 +13,7 @@ class Ui_Load(object):
     def setupUi(self, Load):
         Load.setObjectName("Load")
         Load.resize(800, 600)
+        Load.setFixedSize(800, 600)
         self.LoadBtn = QtWidgets.QPushButton(parent=Load)
         self.LoadBtn.setGeometry(QtCore.QRect(630, 20, 141, 61))
         font = QtGui.QFont()

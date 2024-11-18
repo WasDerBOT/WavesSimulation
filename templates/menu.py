@@ -13,6 +13,7 @@ class Ui_Menu(object):
     def setupUi(self, Menu):
         Menu.setObjectName("Menu")
         Menu.resize(800, 600)
+        Menu.setFixedSize(800, 600)
         self.CreateBtn = QtWidgets.QPushButton(parent=Menu)
         self.CreateBtn.setGeometry(QtCore.QRect(70, 470, 271, 91))
         font = QtGui.QFont()

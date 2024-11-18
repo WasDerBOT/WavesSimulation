@@ -3,10 +3,10 @@ from math import cos, sqrt, pi
 from PyQt6.QtGui import QPainter, QColor
 
 T = 1 / 30  # Period
-k = 20
+k = 40
 
 
-def kabs(num):
+def k_abs(num):
     if num > 0:
         return num
     return 0
@@ -58,7 +58,7 @@ class Plane:
         self.width = width
         self.cellSize = (550 / height)
         self.points = [[Point(i, k, 1, 0, 0, plane=self) for i in range(self.width)] for k in
-                               range(self.height)]
+                       range(self.height)]
         self.painter = None
         self.brush_size = 15
         self.initial_points = [[Point(i, k, 1, 0, 0, plane=self) for i in range(self.width)] for k in
@@ -78,9 +78,9 @@ class Plane:
                 self.points[i][j].draw(painter)
 
     def change_env(self, x, y):
-        tempCellSize = int(self.cellSize)
-        x //= tempCellSize
-        y //= tempCellSize
+        temp_cell_size = int(self.cellSize)
+        x //= temp_cell_size
+        y //= temp_cell_size
         size = self.brush_size
         left_up, right_down = ((max(0, x - size // 2)), max(0, y - size // 2)), (
             min(self.width - 1, x + size // 2), min((self.height - 1), y + size // 2))
@@ -90,14 +90,14 @@ class Plane:
                 ty = self.points[i][j].y - y
                 r = sqrt(tx ** 2 + ty ** 2)
                 if r <= (size / 2):
-                    self.points[i][j].is_unmovable = True
-                    self.points[i][j].mass = 10
+                    self.points[i][j].mass = 5
+
 
     def shake(self, x, y):
-        tempCellSize = int(self.cellSize)
-        x //= tempCellSize
-        y //= tempCellSize
-        size = self.brush_size
+        temp_cell_size = int(self.cellSize)
+        x //= temp_cell_size
+        y //= temp_cell_size
+        size = self.brush_size // 2
 
         left_up, right_down = ((max(0, x - size // 2)), max(0, y - size // 2)), (
             min(self.width - 1, x + size // 2), min((self.height - 1), y + size // 2))
@@ -107,7 +107,7 @@ class Plane:
                 ty = self.points[i][j].y - y
                 r = sqrt(tx ** 2 + ty ** 2)
                 if r <= (size / 2):
-                    self.points[i][j].height = kabs(
+                    self.points[i][j].height = k_abs(
                         cos(tx * pi / (size / 2)) * cos(0 * ty * pi / (sqrt(size ** 2 - tx ** 2))) - abs(tx) / (
                                 size / 2) - (ty / (size / 2)) ** 4)
                     self.points[i][j].normalize_fields()
