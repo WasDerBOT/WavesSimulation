@@ -24,7 +24,7 @@ class Point:
 
     def draw(self, painter: QPainter):
         h = self.height
-        temp = 255 - int((h + 1) * 255 / 2)
+        temp = max(0, min(255 - int((h + 1) * 255 / 2), 254))
         tempCellSize = int(self.plane.cellSize)
         painter.fillRect(self.x * tempCellSize, self.y * tempCellSize, tempCellSize, tempCellSize,
                          QColor(temp, int(((temp / 255) ** (1 / self.mass)) * 255),

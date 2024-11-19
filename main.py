@@ -72,13 +72,13 @@ class Main(QMainWindow, Ui_MainWindow):
         self.timer.stop()
         self.IsGoing = False
         self.Play_PauseBtn.clicked.connect(self.resume)
-        self.Play_PauseBtn.setText("Pause")
+        self.Play_PauseBtn.setText("Play")
 
     def resume(self):
         self.timer.start(T)
         self.IsGoing = False
         self.Play_PauseBtn.clicked.connect(self.pause)
-        self.Play_PauseBtn.setText("Play")
+        self.Play_PauseBtn.setText("Pause")
 
     def to_save(self):
         self.pause()
@@ -128,7 +128,7 @@ class Create(QWidget, Ui_Create):
         window.plane = Plane(height, width)
         self.hide()
         window.show()
-        window.timer.start(T)
+        window.resume()
 
     def go_back(self):
         self.hide()
@@ -168,7 +168,7 @@ class Load(QWidget, Ui_Load):
 
         self.hide()
         window.show()
-        window.timer.start(T)
+        window.resume()
 
     def list_update(self):
 
@@ -194,7 +194,7 @@ class Save(QWidget, Ui_Save):
     def go_back(self):
         self.hide()
         window.show()
-        window.timer.start(30)
+        window.resume()
 
     def save(self):
         name = self.lineEdit.text()
