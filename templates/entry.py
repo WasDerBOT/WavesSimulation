@@ -34,7 +34,6 @@ class Ui_Greeting(object):
         font.setPointSize(22)
         self.enterBtn.setFont(font)
         self.enterBtn.setObjectName("enterBtn")
-
         self.retranslateUi(Greeting)
         QtCore.QMetaObject.connectSlotsByName(Greeting)
 
@@ -44,3 +43,7 @@ class Ui_Greeting(object):
         self.tittle.setText(_translate("Greeting", "Waves simulation"))
         self.subtittle.setText(_translate("Greeting", "Developed by Artem Edokov"))
         self.enterBtn.setText(_translate("Greeting", "Enter"))
+        with open("templates/stylesheets/entry.css", "r") as f:
+            stylesheet = f.read()
+        Greeting.setStyleSheet(stylesheet)
+

@@ -1,0 +1,29 @@
+QWidget {
+    background-color: #f0f0f0;
+}
+
+#tittle {
+    font-size: 55px;
+    color: #333;
+    text-align: center;
+}
+
+#subtittle {
+    font-size: 20px;
+    color: #666;
+    text-align: center;
+}
+
+QPushButton {
+    font-size: 22px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 15px 32px;
+    cursor: pointer;
+}
+
+#enterBtn:hover {
+    background-color: #45a049;
+}
