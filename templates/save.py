@@ -53,3 +53,6 @@ class Ui_Save(object):
         self.SaveBtn.setText(_translate("Save", "Save"))
         self.label_2.setText(_translate("Save", "Enter a name for your save"))
         self.GoBackBtn.setText(_translate("Save", "Go back"))
+        with open("templates/stylesheets/save.css", "r") as f:
+            stylesheet = f.read()
+        Save.setStyleSheet(stylesheet)
