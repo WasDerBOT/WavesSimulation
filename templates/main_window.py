@@ -76,3 +76,6 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Size of brush"))
         self.MenuBtn.setText(_translate("MainWindow", "Menu"))
         self.SaveBtn.setText(_translate("MainWindow", "Save"))
+        with open("templates/stylesheets/main_window.css", "r") as f:
+            stylesheet = f.read()
+        MainWindow.setStyleSheet(stylesheet)
