@@ -42,4 +42,7 @@ class Ui_Menu(object):
         Menu.setWindowTitle(_translate("Menu", "Waves simulation"))
         self.CreateBtn.setText(_translate("Menu", "Create new field"))
         self.LoadBtn.setText(_translate("Menu", "Load"))
-        self.label.setText(_translate("Menu", "Menu"))
+        self.label.setText(_translate("MeKnu", "Menu"))
+        with open("templates/stylesheets/menu.css", "r") as f:
+            stylesheet = f.read()
+        self.setStyleSheet(stylesheet)
