@@ -62,3 +62,6 @@ class Ui_Create(object):
         self.TotalPointsLbl.setText(_translate("Create", "Total points: {height * width}"))
         self.CreateBtn.setText(_translate("Create", "Create"))
         self.GoBackBtn.setText(_translate("Create", "Go back"))
+        with open("templates/stylesheets/create.css", "r") as f:
+            stylesheet = f.read()
+        Create.setStyleSheet(stylesheet)
