@@ -38,3 +38,6 @@ class Ui_Load(object):
         Load.setWindowTitle(_translate("Load", "Waves simulation"))
         self.LoadBtn.setText(_translate("Load", "Load"))
         self.GoBackBtn.setText(_translate("Load", "Go back"))
+        with open("templates/stylesheets/load.css", "r") as f:
+            stylesheet = f.read()
+        Load.setStyleSheet(stylesheet)
