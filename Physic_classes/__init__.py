@@ -1,9 +1,10 @@
+import math
 from math import cos, sqrt, pi
 
 from PyQt6.QtGui import QPainter, QColor
 
 T = 1 / 30  # Period
-k = 40
+k = 20
 
 
 def k_abs(num):
@@ -24,7 +25,10 @@ class Point:
 
     def draw(self, painter: QPainter):
         h = self.height
-        temp = max(0, min(255 - int((h + 1) * 255 / 2), 254))
+        if h > 0:
+            temp = max(0, min(255 - int((h + 1) * 255 / 2), 254))
+        else:
+            temp = max(0, min(255 - int((h + 1) * 255 / 2), 254))
         tempCellSize = int(self.plane.cellSize)
         painter.fillRect(self.x * tempCellSize, self.y * tempCellSize, tempCellSize, tempCellSize,
                          QColor(temp, int(((temp / 255) ** (1 / self.mass)) * 255),
@@ -46,7 +50,6 @@ class Point:
         force = dx * k
         self.velocity += force * T / self.mass
         self.normalize_fields()
-        self.normalize_fields()
 
     def process_heights(self):
         self.height += self.velocity
@@ -54,6 +57,7 @@ class Point:
 
 class Plane:
     def __init__(self, height, width):
+        self.frame_count = 0
         self.height = height
         self.width = width
         self.cellSize = (550 / height)
@@ -96,20 +100,20 @@ class Plane:
         temp_cell_size = int(self.cellSize)
         x //= temp_cell_size
         y //= temp_cell_size
-        size = self.brush_size // 2
+        size = 10 + (3 * self.brush_size * abs(math.sin(self.frame_count * 0.3))) // 2
 
-        left_up, right_down = ((max(0, x - size // 2)), max(0, y - size // 2)), (
-            min(self.width - 1, x + size // 2), min((self.height - 1), y + size // 2))
-        for i in range(left_up[1], right_down[1]):
-            for j in range(left_up[0], right_down[0]):
-                tx = self.points[i][j].x - x
-                ty = self.points[i][j].y - y
-                r = sqrt(tx ** 2 + ty ** 2)
-                if r <= (size / 2):
-                    self.points[i][j].height = k_abs(
-                        cos(tx * pi / (size / 2)) * cos(0 * ty * pi / (sqrt(size ** 2 - tx ** 2))) - abs(tx) / (
-                                size / 2) - (ty / (size / 2)) ** 4)
-                    self.points[i][j].normalize_fields()
+        for i in range(int(y - size // 2), int(y + size // 2)):
+            for j in range(x, x + 1):
+                tx = j - x
+                ty = i - (y - size // 2)
+                if self.frame_count <= 30:
+                    self.points[i][j].height = math.sin(self.frame_count * 0.3) * (math.sin(ty * pi / size) ** 4)
+                self.points[i][j - 1].height = 0
+                self.points[i][j - 1].velocity = 0
+        self.points[int(y - size // 2) - 1][x].height = 0
+        self.points[int(y + size // 2) + 1][x].height = 0
+        self.points[int(y - size // 2) - 1][x].velocity = 0
+        self.points[int(y + size // 2) + 1][x].velocity = 0
 
     def process(self):
         if self.width < 5 and self.height < 5:

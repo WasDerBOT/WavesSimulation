@@ -1,3 +1,4 @@
+import math
 import os
 import sqlite3
 import sys
@@ -26,6 +27,9 @@ c.execute('''CREATE TABLE IF NOT EXISTS fields (id INTEGER PRIMARY KEY, name TEX
 class Main(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
+        self.is_shaking = False
+        self.shaking_duration = 60
+        self.shaking_position = (0, 0)
         self.setupUi(self)
         self.setMouseTracking(True)
         # Создаем заглушку плоскости
@@ -49,7 +53,9 @@ class Main(QMainWindow, Ui_MainWindow):
     def mousePressEvent(self, event: QEvent):
         x, y = event.pos().x(), event.pos().y()
         if event.button() == Qt.MouseButton.LeftButton:
-            self.plane.shake(x, y)
+            self.is_shaking = True
+            self.plane.frame_count = 0
+            self.shaking_position = (x, y)
         elif event.button() == Qt.MouseButton.RightButton:
             self.plane.change_env(x, y)
         self.update()
@@ -59,7 +65,14 @@ class Main(QMainWindow, Ui_MainWindow):
         self.update()
 
     def process(self):
+        if self.is_shaking:
+            x, y = self.shaking_position
+            self.plane.shake(x, y)
         self.plane.process()
+        self.plane.frame_count += 1
+        if self.plane.frame_count >= self.shaking_duration:
+            self.is_shaking = False
+            self.plane.frame_count = 0
         self.update()
 
     def paintEvent(self, event):
