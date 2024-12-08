@@ -27,7 +27,7 @@ class Ui_Greeting(object):
         font.setPointSize(20)
         self.subtittle.setFont(font)
         self.subtittle.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.subtittle.setObjectName("subtittle")
+        self.subtittle.setObjectName("")
         self.enterBtn = QtWidgets.QPushButton(parent=Greeting)
         self.enterBtn.setGeometry(QtCore.QRect(320, 430, 161, 71))
         font = QtGui.QFont()
@@ -41,7 +41,7 @@ class Ui_Greeting(object):
         _translate = QtCore.QCoreApplication.translate
         Greeting.setWindowTitle(_translate("Greeting", "Waves simulation"))
         self.tittle.setText(_translate("Greeting", "Waves simulation"))
-        self.subtittle.setText(_translate("Greeting", "Developed by Artem Edokov"))
+
         self.enterBtn.setText(_translate("Greeting", "Enter"))
         with open("templates/stylesheets/entry.css", "r") as f:
             stylesheet = f.read()

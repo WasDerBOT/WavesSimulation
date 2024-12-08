@@ -24,6 +24,8 @@ def angle_between(v1, v2):
     v1_norm = (v1[0] ** 2 + v1[1] ** 2) ** 0.5
     v2_norm = (v2[0] ** 2 + v2[1] ** 2) ** 0.5
     dot_product = v1[0] * v2[0] + v1[1] * v2[1]
+    if not v1_norm * v2_norm:
+        return 0
     angle = acos(dot_product / (v1_norm * v2_norm))
     return angle
 
@@ -53,9 +55,14 @@ class Main(QMainWindow, Ui_MainWindow):
         self.IsGoing = True
         self.Play_PauseBtn.clicked.connect(self.pause)
         self.BrushSizeHorizontalSlider.valueChanged.connect(self.set_brush_size)
+        self.EnvHorizontalSlider.valueChanged.connect(self.set_env_coef)
+        self.set_env_coef()
 
     def set_brush_size(self):
         self.plane.brush_size = self.BrushSizeHorizontalSlider.value()
+
+    def set_env_coef(self):
+        self.plane.env_mass = self.EnvHorizontalSlider.value()
 
     def init_plane(self, plane: Plane):
         self.plane = plane

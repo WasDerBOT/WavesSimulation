@@ -70,6 +70,7 @@ class Point:
 
 class Plane:
     def __init__(self, height, width):
+        self.env_mass = 1
         self.frame_count = 0
         self.height = height
         self.width = width
@@ -107,7 +108,7 @@ class Plane:
                 ty = self.points[i][j].y - y
                 r = sqrt(tx ** 2 + ty ** 2)
                 if r <= (size / 2):
-                    self.points[i][j].mass = 5
+                    self.points[i][j].mass = self.env_mass
 
     def shake(self, x, y, angle):
         temp_cell_size = int(self.cellSize)

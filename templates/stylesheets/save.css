@@ -2,11 +2,7 @@ QWidget {
     background-color: #f0f0f0;
 }
 
-#label_2 {
-    font-size: 36px;
-    color: #333;
-    text-align: center;
-}
+
 
 QPushButton {
     font-size: 22px;
