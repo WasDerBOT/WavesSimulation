@@ -67,7 +67,9 @@ class Main(QMainWindow, Ui_MainWindow):
     def mouseReleaseEvent(self, event):
         x, y = event.pos().x(), event.pos().y()
         x0, y0 = self.shaking_position
-        if event.button() == Qt.MouseButton.LeftButton and not self.is_shaking:
+        if event.button() == Qt.MouseButton.LeftButton and not self.is_shaking and x in range(0,
+                                                                                              int(self.plane.width * self.plane.cellSize) + 1) and y in range(
+            0, int(self.plane.height * self.plane.cellSize) + 1):
             self.is_shaking = True
             self.plane.frame_count = 0
             self.shaking_angle = angle_between((x - x0, y - y0), (1, 0))
@@ -75,7 +77,9 @@ class Main(QMainWindow, Ui_MainWindow):
             if y - y0 > 0:
                 self.shaking_angle = 2 * pi - self.shaking_angle
             print(x - x0, y - y0)
-        elif event.button() == Qt.MouseButton.RightButton:
+        elif event.button() == Qt.MouseButton.RightButton and not self.is_shaking and x in range(0,
+                                                                                                 int(self.plane.width * self.plane.cellSize) + 1) and y in range(
+            0, int(self.plane.height * self.plane.cellSize) + 1):
             self.plane.change_env(x0, y0)
         self.update()
 
