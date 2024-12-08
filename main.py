@@ -1,7 +1,7 @@
-import math
 import os
 import sqlite3
 import sys
+from math import acos, pi
 
 from PyQt6.QtCore import QTimer, QStringListModel, QEvent, Qt
 from PyQt6.QtGui import QPainter
@@ -19,6 +19,15 @@ from templates.save import Ui_Save
 
 tHeight, tWidth = 55, 65
 
+
+def angle_between(v1, v2):
+    v1_norm = (v1[0] ** 2 + v1[1] ** 2) ** 0.5
+    v2_norm = (v2[0] ** 2 + v2[1] ** 2) ** 0.5
+    dot_product = v1[0] * v2[0] + v1[1] * v2[1]
+    angle = acos(dot_product / (v1_norm * v2_norm))
+    return angle
+
+
 conn = sqlite3.connect('fields.db')
 c = conn.cursor()
 c.execute('''CREATE TABLE IF NOT EXISTS fields (id INTEGER PRIMARY KEY, name TEXT, file_name TEXT)''')
@@ -28,6 +37,7 @@ class Main(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.is_shaking = False
+        self.shaking_angle = 0
         self.shaking_duration = 60
         self.shaking_position = (0, 0)
         self.setupUi(self)
@@ -52,12 +62,21 @@ class Main(QMainWindow, Ui_MainWindow):
 
     def mousePressEvent(self, event: QEvent):
         x, y = event.pos().x(), event.pos().y()
-        if event.button() == Qt.MouseButton.LeftButton:
+        self.shaking_position = (x, y)
+
+    def mouseReleaseEvent(self, event):
+        x, y = event.pos().x(), event.pos().y()
+        x0, y0 = self.shaking_position
+        if event.button() == Qt.MouseButton.LeftButton and not self.is_shaking:
             self.is_shaking = True
             self.plane.frame_count = 0
-            self.shaking_position = (x, y)
+            self.shaking_angle = angle_between((x - x0, y - y0), (1, 0))
+            print(self.shaking_angle / (2 * pi) * 360)
+            if y - y0 > 0:
+                self.shaking_angle = 2 * pi - self.shaking_angle
+            print(x - x0, y - y0)
         elif event.button() == Qt.MouseButton.RightButton:
-            self.plane.change_env(x, y)
+            self.plane.change_env(x0, y0)
         self.update()
 
     def reset(self):
@@ -67,7 +86,7 @@ class Main(QMainWindow, Ui_MainWindow):
     def process(self):
         if self.is_shaking:
             x, y = self.shaking_position
-            self.plane.shake(x, y)
+            self.plane.shake(x, y, self.shaking_angle)
         self.plane.process()
         self.plane.frame_count += 1
         if self.plane.frame_count >= self.shaking_duration:

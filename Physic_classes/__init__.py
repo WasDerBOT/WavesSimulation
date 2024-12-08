@@ -1,5 +1,5 @@
 import math
-from math import cos, sqrt, pi
+from math import sqrt, pi
 
 from PyQt6.QtGui import QPainter, QColor
 
@@ -11,6 +11,19 @@ def k_abs(num):
     if num > 0:
         return num
     return 0
+
+
+def rotate_point(point1, point2, angle):
+    x1, y1 = point1
+    x2, y2 = point2
+
+    dx = x1 - x2
+    dy = y1 - y2
+
+    nx = dx * math.cos(angle) - dy * math.sin(angle) + x2
+    ny = dx * math.sin(angle) + dy * math.cos(angle) + y2
+
+    return round(nx), round(ny)
 
 
 class Point:
@@ -96,7 +109,7 @@ class Plane:
                 if r <= (size / 2):
                     self.points[i][j].mass = 5
 
-    def shake(self, x, y):
+    def shake(self, x, y, angle):
         temp_cell_size = int(self.cellSize)
         x //= temp_cell_size
         y //= temp_cell_size
@@ -106,14 +119,27 @@ class Plane:
             for j in range(x, x + 1):
                 tx = j - x
                 ty = i - (y - size // 2)
+                j, i = rotate_point((j, i), (x, y), -angle)
+                j = min(max(j, 0), self.width - 1)
+                i = min(max(i, 0), self.height - 1)
                 if self.frame_count <= 30:
                     self.points[i][j].height = math.sin(self.frame_count * 0.3) * (math.sin(ty * pi / size) ** 4)
-                self.points[i][j - 1].height = 0
-                self.points[i][j - 1].velocity = 0
-        self.points[int(y - size // 2) - 1][x].height = 0
-        self.points[int(y + size // 2) + 1][x].height = 0
-        self.points[int(y - size // 2) - 1][x].velocity = 0
-        self.points[int(y + size // 2) + 1][x].velocity = 0
+
+
+                j, i = rotate_point((j, i), (x, y), angle)
+
+                for delta in range(2, 5):
+
+                    j, i = rotate_point((j - delta, i), (x, y), -angle)
+                    j = min(max(j, 0), self.width - 1)
+                    i = min(max(i, 0), self.height - 1)
+                    self.points[i][j].height = 0
+                    self.points[i][j].velocity = 0
+                    j, i = rotate_point((j - delta, i), (x, y), +angle)
+        # self.points[int(y - size // 2) - 1][x].height = 0
+        # self.points[int(y + size // 2) + 1][x].height = 0
+        # self.points[int(y - size // 2) - 1][x].velocity = 0
+        # self.points[int(y + size // 2) + 1][x].velocity = 0
 
     def process(self):
         if self.width < 5 and self.height < 5:
