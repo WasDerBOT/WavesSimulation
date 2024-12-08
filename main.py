@@ -73,10 +73,8 @@ class Main(QMainWindow, Ui_MainWindow):
             self.is_shaking = True
             self.plane.frame_count = 0
             self.shaking_angle = angle_between((x - x0, y - y0), (1, 0))
-            print(self.shaking_angle / (2 * pi) * 360)
             if y - y0 > 0:
                 self.shaking_angle = 2 * pi - self.shaking_angle
-            print(x - x0, y - y0)
         elif event.button() == Qt.MouseButton.RightButton and not self.is_shaking and x in range(0,
                                                                                                  int(self.plane.width * self.plane.cellSize) + 1) and y in range(
             0, int(self.plane.height * self.plane.cellSize) + 1):
@@ -84,6 +82,8 @@ class Main(QMainWindow, Ui_MainWindow):
         self.update()
 
     def reset(self):
+        self.is_shaking = False
+        self.plane.frame_count = 0
         self.plane.reset()
         self.update()
 
